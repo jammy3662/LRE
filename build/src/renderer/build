@@ -1,0 +1,4 @@
+#!/bin/bash
+
+clang -lc++ -std=c++98 main.cpp *.cc -I../include \
+		-g3 -Wno-writable-strings

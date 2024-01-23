@@ -1,0 +1,14 @@
+#!/bin/bash
+
+cd src
+
+for i in */
+do
+	cd $i
+	if [[ -e build ]]
+	then
+		echo -e "________"$i"________\n"
+		./build
+	fi
+	cd ..
+done

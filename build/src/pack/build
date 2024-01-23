@@ -1,0 +1,8 @@
+#!/bin/bash
+
+OUT="../exec/lgnpack"
+
+clang -lc++ -std=c++98 -I../include main.cpp *.cc -o $OUT \
+		-g3 -Wno-writable-strings
+
+[[ $? ]] && ln -srf $OUT ./$(basename lgnpack)

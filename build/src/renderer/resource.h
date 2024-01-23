@@ -1,0 +1,1 @@
+../pack/resource.h
