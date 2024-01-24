@@ -7,10 +7,7 @@
 | Loaded resources are buffered, similarly to within the binary.
 |________________________________________________________________*/
 
-#include "resource.h"
-
-// REPLACE WITH FRONTEND RESOURCE STRUCTS
-typedef struct{} temp_t;
+typedef short rid;
 
 namespace pack
 {
@@ -24,8 +21,9 @@ namespace pack
 	void writeFile (const char* path = filepath);
 	void loadFile (const char* path);
 	
-	temp_t getTexture (const char* name);
-	temp_t getModel (const char* name);
+	rid texture (const char* name);
+	rid model (const char* name);
+	rid pipe (const char* name);
 }
 
 #endif

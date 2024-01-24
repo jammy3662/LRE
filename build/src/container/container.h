@@ -13,6 +13,11 @@ struct arr
 	void allocate (int num);
 	void expand (); // allocate 50% more space
 	void shrink (); // deallocate all unused elements
+	
+	T& operator [] (int idx)
+	{
+		return buf [idx];
+	}
 };
 
 #endif

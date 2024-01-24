@@ -1,23 +1,16 @@
 #include "trie.h"
 
-template <size_t N>
-void Trie::insert (Key keys [N])
-{
-	for (Key key : keys)
-	{
-		insert (key.key, key.value);
-	}
-}
+#include <stdlib.h>
 
-template <typename val_t, typename leaf_t>
-void Trie::insert (const val_t* str, leaf_t result)
+template <typename val_t, typename leaf_t, val_t END>
+void Trie <val_t,leaf_t,END>::insert (const val_t* str, leaf_t result)
 {
-	Trie <val_t,leaf_t>* tree = this;
-	Trie <val_t,leaf_t>* parent = 0;
+	Trie <val_t,leaf_t,END>* tree = this;
+	Trie <val_t,leaf_t,END>* parent = 0;
 	
-	for (; *str; ++str)
+	for (; *str != END; ++str)
 	{
-		if (tree->value == -1)
+		if (tree->value == END)
 		{
 			// populate the first node at this level
 			tree->value = *str;
@@ -30,14 +23,18 @@ void Trie::insert (const val_t* str, leaf_t result)
 			{
 				// if not there, add it to the end
 				tree->next = (Trie*) malloc (sizeof (Trie));
-				*tree->next = {.value = *str, .next = 0x0, .match = 0x0, .result = 0};
+				Trie <val_t,leaf_t,END> next = {0};
+				next.value = *str;
+				*tree->next = next;
 			}
 		}
 		
 		if (!tree->match)
 		{
 			tree->match = (Trie*) malloc (sizeof (Trie));
-			*tree->match = {.value = -1, .next = 0x0, .match = 0x0, .result = 0};
+			Trie <val_t,leaf_t,END> match = {0};
+			match.value = *str;
+			*tree->match = match;
 		}
 		parent = tree;
 		tree = tree->match;
@@ -51,11 +48,12 @@ void Trie::insert (const val_t* str, leaf_t result)
 	tree->result = result;
 }
 
-Tok Trie::find (const char* key)
+template <typename val_t, typename leaf_t, val_t END>
+leaf_t Trie <val_t,leaf_t,END>::find (const val_t* key)
 {
-	Trie* tree = this;
+	Trie <val_t,leaf_t,END>* tree = this;
 	
-	unsigned char result = 0;
+	leaf_t result = 0;
 	
 	for (; *key; ++key)
 	{

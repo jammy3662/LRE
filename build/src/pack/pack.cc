@@ -19,6 +19,8 @@ ________________________________________________________________________________
 #include "pack.h"
 #include "resource.h"
 
+using namespace res;
+
 namespace pack
 {
 	// we can use a non-fixed-size type here
@@ -28,7 +30,7 @@ namespace pack
 	const char* filepath; // current resource pack
 
 	// track loaded resources by name and index
-	Trie <int8, int16> texturenames = {0},
+	Trie <int8, int16, 0> texturenames = {0},
 		               modelnames = {0};
 
 	arr <Shader>

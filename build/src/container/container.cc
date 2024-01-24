@@ -2,15 +2,15 @@
 
 #include <math.h>
 
-template class <T>
-void array <T>::allocate (int num)
+template <class T>
+void arr <T>::allocate (int num)
 {
 	buf = realloc (buf, num * sizeof (T));
 	available = num;
 }
 
 template <class T>
-void array <T>::expand ()
+void arr <T>::expand ()
 {
 	// double the current capacity
 	// or allocate the first element
@@ -22,7 +22,7 @@ void array <T>::expand ()
 }
 
 template <class T>
-void array <T>::append (T& next)
+void arr <T>::append (T& next)
 {
 	if (used >= available)
 		expand ();

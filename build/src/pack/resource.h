@@ -12,6 +12,8 @@
 // no padding (single-byte aligned)
 #pragma pack (push, 1)
 
+typedef int16_t rid; // index into internal buffer of resource pack
+
 namespace res {
 	
 struct Shader
@@ -20,25 +22,19 @@ struct Shader
 	const int8_t* fragmentCode;
 };
 
-// raw texel data in a buffer
-typedef arr <int8_t> Image;
-
 struct Texture
 {
 	int8_t properties; // texture metadata
 	int16_t width, height, depth;
 	
-	typedef arr <int8_t> Image;
-
-	arr <Image> 
-
-	arr <int8_t> texels; // array of raw texels (could be pixels or voxels, etc)
+	// array of raw texels (could be pixels or voxels, etc)
+	arr <int8_t> texels;
 };
 
 struct Material
 {
 	float shine, refl;
-	int16_t diffuse, normal, height, specular;
+	rid diffuse, normal, height, specular;
 };
 
 // a collection of vertices amd indices
@@ -53,7 +49,7 @@ struct Mesh
 	arr <float> vertexStream;
 	arr <int16_t> indexStream;
 
-	int16_t mtl; // index into material list
+	rid mtl;
 };
 
 // one or more meshes to be drawn as a single object

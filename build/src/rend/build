@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -e
+
+clang -c *.cc -std=c++98 -static \
+	-I$(realpath ../../include) -Wno-writable-strings
+
+OBJECTS=$(find -name '*.o')
+
+ar rcs librend.a $OBJECTS
+mv -v librend.a ../../lib
+
+rm $OBJECTS

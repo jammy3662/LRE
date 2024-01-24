@@ -7,7 +7,7 @@ do
 	cd $i
 	if [[ -e build ]]
 	then
-		echo -e "________"$i"________\n"
+		echo -e "*** $i"
 		./build
 	fi
 	cd ..
