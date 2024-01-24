@@ -2,12 +2,11 @@
 
 set -e
 
-clang -c *.cc -std=c++98 -static \
+clang -S -emit-llvm *.cc -std=c++98 -static \
 	-I$(realpath ../../include) -Wno-writable-strings
 
-OBJECTS=$(find -name '*.o')
+FILES=$(find -name '*.ll')
 
-ar rcs librend.a $OBJECTS
-mv -v librend.a ../../lib
-
-rm $OBJECTS
+llvm-link -o rend.bc $FILES
+rm $FILES
+mv -v rend.bc ../../bin

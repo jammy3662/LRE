@@ -1,14 +1,18 @@
 #!/bin/bash
 
-cd src
+# output folders
+mkdir -p bin
+mkdir -p exec
 
-for i in */
+for i in $(ls -d src/*)
 do
-	cd $i
+	echo -e "*** $i"
+	PTH=$(pwd); cd $i
+	
 	if [[ -e build ]]
 	then
-		echo -e "*** $i"
 		./build
 	fi
-	cd ..
+	
+	cd $PTH
 done

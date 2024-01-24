@@ -2,10 +2,8 @@
 
 set -e
 
-OUT="../../exec/lgnpack"
-
 clang -lc++ -std=c++98 -I$(realpath ../../include) \
 		-g3 -Wno-writable-strings \
-		main.cpp *.cc -o $OUT
+		main.cpp *.cc -o lgnpack
 
-ln -srf $OUT ./$(basename lgnpack)
+ln -srvf lgnpack ../../exec
