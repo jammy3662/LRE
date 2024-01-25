@@ -21,29 +21,28 @@ ________________________________________________________________________________
 
 using namespace res;
 
-namespace pack
-{
-	// track loaded resources by name and index
-	static Trie <int8, int16, 0> texturenames = {0},
-		               modelnames = {0};
+char pack::endian;
+const char* pack::filepath;
 
-	static arr <Shader>
-		shaders = {0};
+// track loaded resources by name and index
+Trie <int8, int16, 0> texturenames = {0},
+									modelnames = {0};
 
-	static arr <Texture>
-		textures = {0};
+arr <Shader>
+	shaders = {0};
 
-	static arr <Material>
-		materials = {0};
+arr <Texture>
+	textures = {0};
 
-	static arr <Mesh>
-		meshes = {0};
+arr <Material>
+	materials = {0};
 
-	static arr <Model>
-		models = {0};
-}
+arr <Mesh>
+	meshes = {0};
 
-static
+arr <Model>
+	models = {0};
+
 struct platform
 {
 	platform ()

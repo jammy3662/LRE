@@ -18,9 +18,9 @@ namespace pack
 	enum ENDIAN
 	{ LIL = 'l', BIG = 'b' };
 	
-	static char endian;
+	extern char endian;
 	
-	static const char* filepath;
+	extern const char* filepath;
 	
 	void writeFile (const char* path = filepath);
 	void loadFile (const char* path);

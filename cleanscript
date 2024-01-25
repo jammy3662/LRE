@@ -1,0 +1,5 @@
+#!/bin/bash
+
+rm -rv bin
+rm -rv exec
+echo "▶▶▶ Clean."

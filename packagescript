@@ -1,0 +1,6 @@
+#!/bin/bash
+
+set -e
+
+llvm-link -v bin/*.bc -o bin/lre.bc
+echo "▶▶▶ Done packaging."

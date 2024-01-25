@@ -5,7 +5,7 @@ set -e
 CLANGFLAGS="-std=c++98 -I../../include -Wno-writable-strings"
 
 # Build the standalone lgnpack binary
-clang -lc++ -g3 -static  \
+clang -lc++ -std=c++98 -g3 -static  \
 		main.cpp *.cc -o lgnpack $CLANGFLAGS
 
 ln -srvf lgnpack ../../exec
@@ -15,6 +15,6 @@ clang -S -emit-llvm $CLANGFLAGS *.cc
 
 FILES=$(find -name '*.ll')
 
-llvm-link -v -o pack.bc $FILES
+llvm-link  -v -o pack.bc $FILES
 rm $FILES
 mv -v pack.bc ../../bin
