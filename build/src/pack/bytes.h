@@ -11,14 +11,14 @@
 namespace bytes
 {
 	// tests endianness at runtime for each platform
-	int8_t testendian ();
+	extern int8_t testendian ();
 
 	// byte swap - reversing byte order
-	int16_t bswap (int16_t s);
-	int32_t bswap (int32_t i);
-	int64_t bswap (int64_t l);
-	float   bswap (float f);
-	double  bswap (double d);
+	extern int16_t bswap (int16_t s);
+	extern int32_t bswap (int32_t i);
+	extern int64_t bswap (int64_t l);
+	extern float   bswap (float f);
+	extern double  bswap (double d);
 }
 
 #endif

@@ -7,23 +7,27 @@
 | Loaded resources are buffered, similarly to within the binary.
 |________________________________________________________________*/
 
-typedef short rid;
+// TODO: move these into resource module
+// tell compiler to treat these as seperate types instead of just int
+typedef enum{} ridt; // texture resource
+typedef enum{} ridm; // model resource
+typedef enum{} ridp; // pipeline resource
 
 namespace pack
 {
 	enum ENDIAN
 	{ LIL = 'l', BIG = 'b' };
 	
-	extern char endian;
+	static char endian;
 	
-	extern const char* filepath;
+	static const char* filepath;
 	
 	void writeFile (const char* path = filepath);
 	void loadFile (const char* path);
 	
-	rid texture (const char* name);
-	rid model (const char* name);
-	rid pipe (const char* name);
+	ridt texture (const char* name);
+	ridm model (const char* name);
+	ridp pipe (const char* name);
 }
 
 #endif

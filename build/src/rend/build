@@ -7,6 +7,6 @@ clang -S -emit-llvm *.cc -std=c++98 -static \
 
 FILES=$(find -name '*.ll')
 
-llvm-link -o rend.bc $FILES
+llvm-link -v -o rend.bc $FILES
 rm $FILES
 mv -v rend.bc ../../bin

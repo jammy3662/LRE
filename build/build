@@ -16,3 +16,5 @@ do
 	
 	cd $PTH
 done
+
+echo "Build complete. (Use './package' to generate execs)"

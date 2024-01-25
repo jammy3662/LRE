@@ -5,11 +5,8 @@
 #include "bytes.h"
 #include "brief.h"
 
-namespace bytes
-{
-
 // tests endianness at runtime for each platform
-int8 testendian ()
+int8 bytes::testendian ()
 {
 	int32 n = 1;
 	
@@ -19,12 +16,12 @@ int8 testendian ()
 	// if it's big endian, '0' will be in byte 1, leaving the '1' in byte 4
 }
 
-int16 bswap (int16 s)
+int16 bytes::bswap (int16 s)
 {
 	return (s << 8 | s >> 8);
 }
 
-int32 bswap (int32 i)
+int32 bytes::bswap (int32 i)
 {
 	// cast a 4-byte int to an array of 4 bytes
 	// (and vice versa)
@@ -35,7 +32,7 @@ int32 bswap (int32 i)
 	return *(int32*) dst;
 }
 
-int64 bswap (int64 l)
+int64 bytes::bswap (int64 l)
 {
 	// same logic as 32 bit swap func
 	int8* src = (int8*) &l;
@@ -46,7 +43,5 @@ int64 bswap (int64 l)
 	return *(int64*) dst;
 }
 
-float bswap (float f) {	return bswap (*(int32*)&f); }
-double bswap (double d) { return bswap (*(int64*)&d); }
-
-} // end namespace
+float bytes::bswap (float f) {	return bswap (*(int32*)&f); }
+double bytes::bswap (double d) { return bswap (*(int64*)&d); }

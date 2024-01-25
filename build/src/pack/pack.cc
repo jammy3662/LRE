@@ -23,32 +23,27 @@ using namespace res;
 
 namespace pack
 {
-	// we can use a non-fixed-size type here
-	// this is exclusively for runtime
-	char endian;
-
-	const char* filepath; // current resource pack
-
 	// track loaded resources by name and index
-	Trie <int8, int16, 0> texturenames = {0},
+	static Trie <int8, int16, 0> texturenames = {0},
 		               modelnames = {0};
 
-	arr <Shader>
+	static arr <Shader>
 		shaders = {0};
 
-	arr <Texture>
+	static arr <Texture>
 		textures = {0};
 
-	arr <Material>
+	static arr <Material>
 		materials = {0};
 
-	arr <Mesh>
+	static arr <Mesh>
 		meshes = {0};
 
-	arr <Model>
+	static arr <Model>
 		models = {0};
 }
 
+static
 struct platform
 {
 	platform ()
