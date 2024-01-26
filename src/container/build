@@ -8,4 +8,4 @@ FILES=$(find -name '*.ll')
 
 llvm-link -v -o container.bc $FILES
 rm $FILES
-mv -v container.bc ../../bin
+mv -vu container.bc ../../bitcode/container.bc

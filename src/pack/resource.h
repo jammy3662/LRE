@@ -13,7 +13,7 @@
 #pragma pack (push, 1)
 
 typedef enum { RGB, GBR, BRG, RBG, GRB, BGR } texel_type;
-typedef enum {_=(int8_t)0} attrib;
+typedef int8_t attrib;
 
 typedef int8_t chr;
 typedef int16_t rid; // index into internal buffer of resource pack
@@ -28,7 +28,14 @@ struct Shader
 
 struct Texture
 {
-	int8_t properties; // texture metadata
+	struct // texture metadata
+	{
+		int8_t type : 2;
+		int8_t channels : 3;
+		int8_t order : 3;
+	}
+	properties;
+	
 	int16_t width, height, depth;
 	
 	// array of raw texels (could be pixels or voxels, etc)
@@ -45,9 +52,17 @@ struct Material
 struct Mesh
 {
 	int8_t nAttribs;
-	// 0000 0000
-	int8_t attribTypes [8];
-	int8_t attribCounts [8];
+	
+	struct // what's in each vertex?
+	{
+		enum { CHAR = 1, SHORT = 2, INT = 4,
+		       LONG = 8, FLOAT = 4, DOUBLE = 8, }
+		type : 4;
+		
+		int8_t
+		count : 4;
+	}
+	attribs [8];
 	
 	int32_t nVertices, nIndices;
 

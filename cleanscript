@@ -1,5 +1,5 @@
 #!/bin/bash
 
-rm -rv bin
 rm -rv exec
+rm -rv bitcode
 echo "▶▶▶ Clean."

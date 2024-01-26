@@ -9,4 +9,4 @@ FILES=$(find -name '*.ll')
 
 llvm-link -v -o rend.bc $FILES
 rm $FILES
-mv -v rend.bc ../../bin
+mv -vu rend.bc ../../bitcode

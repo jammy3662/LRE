@@ -17,4 +17,4 @@ FILES=$(find -name '*.ll')
 
 llvm-link -v $FILES -o lgnpack.bc 
 rm $FILES
-mv -v lgnpack.bc ../../bin
+mv -vu lgnpack.bc ../../bitcode
