@@ -6,19 +6,21 @@
 mkdir -p bin
 mkdir -p exec
 
-for i in $(ls -d src/*)
+for i in $(ls -d src/*/)
 do
-	echo    "╔════════════════════════════════"
-	echo -e "║ in $i "
-	echo    "╚════════════════════════════════"
-	PTH=$(pwd); cd $i
-	
-	if [[ -e build ]]
+	if [[ -e $i/build ]]
 	then
+		
+		echo "╔════════════════════════════════"
+		echo "║ Building in $i "
+		echo "╚════════════════════════════════"
+		
+		PTH=$(pwd); cd $i
+		echo $PTH
+		
 		./build
+		cd $PTH
 	fi
-	
-	cd $PTH
 done
 
 echo "▶▶▶ Build complete. (Use package script to generate more execs)"

@@ -12,14 +12,18 @@
 // no padding (single-byte aligned)
 #pragma pack (push, 1)
 
+typedef enum { RGB, GBR, BRG, RBG, GRB, BGR } texel_type;
+typedef enum {_=(int8_t)0} attrib;
+
+typedef int8_t chr;
 typedef int16_t rid; // index into internal buffer of resource pack
 
 namespace res {
 	
 struct Shader
 {
-	const int8_t* vertexCode;
-	const int8_t* fragmentCode;
+	const chr* vertexCode;
+	const chr* fragmentCode;
 };
 
 struct Texture
@@ -41,6 +45,7 @@ struct Material
 struct Mesh
 {
 	int8_t nAttribs;
+	// 0000 0000
 	int8_t attribTypes [8];
 	int8_t attribCounts [8];
 	
@@ -49,7 +54,7 @@ struct Mesh
 	arr <float> vertexStream;
 	arr <int16_t> indexStream;
 
-	rid mtl;
+	rid material;
 };
 
 // one or more meshes to be drawn as a single object
