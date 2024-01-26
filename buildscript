@@ -4,6 +4,8 @@
 mkdir -p bitcode
 mkdir -p exec
 
+rm -r bitcode/*
+
 for i in $(ls -d src/*/)
 do
 	if [[ -e $i/build ]]

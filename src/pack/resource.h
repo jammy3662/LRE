@@ -53,14 +53,10 @@ struct Mesh
 {
 	int8_t nAttribs;
 	
-	struct // what's in each vertex?
+	struct // a value associated with each vertex
 	{
-		enum { CHAR = 1, SHORT = 2, INT = 4,
-		       LONG = 8, FLOAT = 4, DOUBLE = 8, }
-		type : 4;
-		
-		int8_t
-		count : 4;
+		int8_t type : 4;
+		int8_t count : 4;
 	}
 	attribs [8];
 	

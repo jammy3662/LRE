@@ -10,7 +10,7 @@
 
 namespace bytes
 {
-	// tests endianness at runtime for each platform
+	// tests endianness at runtime of current platform
 	int8_t testendian ();
 
 	// byte swap - reversing byte order

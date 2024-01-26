@@ -7,8 +7,7 @@
 | Loaded resources are buffered, similarly to within the binary.
 |________________________________________________________________*/
 
-// TODO: move these into resource module
-// tell compiler to treat these as seperate types instead of just int
+// TODO: move these into resource (frontend) module (aka renderer)
 typedef enum{} ridt; // texture resource
 typedef enum{} ridm; // model resource
 typedef enum{} ridp; // pipeline resource
@@ -22,8 +21,8 @@ namespace pack
 	
 	extern const char* filepath;
 	
-	void writeFile (const char* path = filepath);
-	void loadFile (const char* path);
+	void save (const char* path = filepath); // only for editing a pack
+	void load (const char* path);
 	
 	ridt texture (const char* name);
 	ridm model (const char* name);

@@ -25,8 +25,9 @@ const char pack::endian = '0';
 const char* pack::filepath;
 
 // track loaded resources by name and index
-Trie <int8, int16, 0> texturenames = {0},
-									modelnames = {0};
+Trie <int8, int16, 0>
+texturenames = {0},
+modelnames = {0};
 
 arr <Shader>
 	shaders = {0};

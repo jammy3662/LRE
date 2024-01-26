@@ -5,8 +5,8 @@
 
 int main (int argc, char** argv)
 {
-	printf ("Program ran successfully.\n");
-	printf ("%c (endianness)\n", pack::endian);
+	printf ("Lagoon Resource Pack Tool\n"
+	        "");
 	
 	return 0;
 }
