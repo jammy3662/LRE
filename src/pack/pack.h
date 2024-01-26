@@ -18,7 +18,7 @@ namespace pack
 	enum ENDIAN
 	{ LIL = 'l', BIG = 'b' };
 	
-	extern char endian;
+	extern const char endian;
 	
 	extern const char* filepath;
 	

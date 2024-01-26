@@ -2,7 +2,7 @@
 
 set -e
 
-clang -S -emit-llvm *.cc -std=c++98 -static \
+clang -S -emit-llvm *.cc -std=c++98 \
 	-I$(realpath ../../include) -Wno-writable-strings
 
 FILES=$(find -name '*.ll')

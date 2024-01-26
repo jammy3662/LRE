@@ -2,5 +2,10 @@
 
 set -e
 
-llvm-link --internalize -v bin/*.bc -o bin/lre.bc
+BITCODE="$(find bin -name '*.bc')"
+
+llvm-link -v $BITCODE -o bin/lre.bc
+
+rm -v $BITCODE
+
 echo "▶▶▶ Done packaging."

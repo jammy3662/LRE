@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# ═║╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥╦╧╨╩╪╫╬
-
 # output folders
 mkdir -p bin
 mkdir -p exec

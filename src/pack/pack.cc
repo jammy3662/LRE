@@ -21,7 +21,7 @@ ________________________________________________________________________________
 
 using namespace res;
 
-char pack::endian;
+const char pack::endian = '0';
 const char* pack::filepath;
 
 // track loaded resources by name and index
@@ -47,6 +47,7 @@ struct platform
 {
 	platform ()
 	{ // test byte order only once upfront
-		pack::endian = bytes::testendian (); }
+		//pack::endian = bytes::testendian ();
+	}
 }
 platform;
