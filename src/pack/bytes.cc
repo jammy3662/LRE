@@ -10,10 +10,12 @@ int8 bytes::testendian ()
 {
 	int32 n = 1;
 	
-	int8 ndn = *(int8*) &n;
-	
-	return ndn ? 'l' : 'b';
 	// if it's big endian, '0' will be in byte 1, leaving the '1' in byte 4
+	if (( (int8*) &n )[0]) return 'l';
+	if (( (int8*) &n )[3]) return 'b';
+	
+	return '?';
+	
 }
 
 int16 bytes::bswap (int16 s)

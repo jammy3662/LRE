@@ -2,11 +2,13 @@
 
 set -e
 
-clang -S -emit-llvm *.cc -std=c++98 \
-	-I$(realpath ../../include) -Wno-writable-strings
+mkdir -p tmp
+cd tmp
 
-FILES=$(find -name '*.ll')
+clang -S -emit-llvm ../*.cc -std=c++98 -I$(realpath ../../include) -Wno-writable-strings
+llvm-link -v *.ll -o ../rend.bc
 
-llvm-link -v -o rend.bc $FILES
-rm $FILES
-mv -vu rend.bc ../../bitcode
+cd ..
+rm -rf tmp
+
+clang -c rend.bc -o rend.o

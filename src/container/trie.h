@@ -3,7 +3,7 @@
 
 #pragma pack (push, 1)
 
-template <typename val_t, typename leaf_t, val_t END_VAL>
+template <typename val_t, typename leaf_t, val_t EndVal>
 struct Trie
 {
 	val_t value;

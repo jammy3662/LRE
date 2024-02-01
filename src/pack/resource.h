@@ -14,12 +14,8 @@
 	
 struct Shader
 {
-	//struct
-	//{
-		int8_t* vertex;
-	  int8_t* pixel;
-	//}
-	//code;
+	int8_t* vertex;
+	int8_t* pixel;
 };
 
 struct Texture

@@ -60,30 +60,58 @@ void save (const char* path)
 	
 	// write fixed-size data first, which points to internal 'heap'
 	
-	fprintf (out, "%hu", textures.used);
-	fwrite (textures, sizeof (Texture), textures.used, out);
+	fprintf (out, "%hu", textures.count);
+	fwrite (textures, sizeof (Texture), textures.count, out);
 
-	fprintf (out, "%hu", materials.used);
-	fwrite (materials, sizeof (Material), materials.used, out);
+	fprintf (out, "%hu", materials.count);
+	fwrite (materials, sizeof (Material), materials.count, out);
 
-	fprintf (out, "%hu", meshes.used);
-	fwrite (meshes, sizeof (Mesh), meshes.used, out);
+	fprintf (out, "%hu", meshes.count);
+	fwrite (meshes, sizeof (Mesh), meshes.count, out);
 	
 	// buffers and streams, variable-size data
-	fprintf (out, "%hu", shaders.used);
-	for (int16_t i = 0; i < shaders.used; ++i)
+	fprintf (out, "%hu", shaders.count);
+	for (int16_t i = 0; i < shaders.count; ++i)
 	{
 		const Shader s = shaders [i];
 		fprintf (out, "%s", s.vertex);
 		fprintf (out, "%s", s.pixel);
 	}
 	
-	fprintf (out, "%hu", models.used);
-	for (int16_t i = 0; i < models.used; ++i)
+	fprintf (out, "%hu", models.count);
+	for (int16_t i = 0; i < models.count; ++i)
 	{
 		arr<int16_t> mdl = models [i];
 		
-		fprintf (out, "%hu", mdl.used);
-		fwrite (mdl, sizeof (int16_t), mdl.used, out);
+		fprintf (out, "%hu", mdl.count);
+		fwrite (mdl, sizeof (int16_t), mdl.count, out);
+	}
+	
+	fclose (out);
+}
+
+void load (const char* path)
+{
+	FILE* in = fopen (path, "r");
+	
+	fscanf (in, "%hu", &textures.count);
+	textures.allocate (textures.count);
+	for (int i = 0; i < textures.count; ++i)
+	{
+		fread (textures, sizeof (Texture), textures.count, in);
+	}
+	
+	fscanf (in, "%hu", &materials.count);
+	materials.allocate (materials.count);
+	for (int i = 0; i < materials.count; ++i)
+	{
+		fread (materials, sizeof (Material), materials.count, in);
+	}
+	
+	fscanf (in, "%hu", &meshes.count);
+	textures.allocate (meshes.count);
+	for (int i = 0; i < meshes.count; ++i)
+	{
+		fread (meshes, sizeof (Mesh), meshes.count, in);
 	}
 }

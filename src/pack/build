@@ -2,19 +2,20 @@
 
 set -e
 
-CLANGFLAGS="-std=c++98 -I$(realpath ../../include/) -Wno-writable-strings"
+INCPATH=$(realpath ../../include/)
+
+CLANGFLAGS="-std=c++98 -I$INCPATH -Wno-writable-strings"
 
 mkdir -p tmp
 cd tmp
 
-# generate the lib
-# (both bitcode and object code)
-clang -S -emit-llvm $CLANGFLAGS ../*.cc
+clang -S -emit-llvm $CLANGFLAGS ../*.cc -std=c++98
 llvm-link -v *.ll -o ../lgnpack.bc
-clang -c ../lgnpack.bc -o ../lgnpack.o
-
-# build the executable tool
-clang ../main.cpp ../lgnpack.bc $(realpath ../../container/container.o) -o ../lgnpack
 
 cd ..
 rm -rf tmp
+
+clang -c lgnpack.bc -o lgnpack.o
+clang main.cpp lgnpack.bc -I$INCPATH -o lgnpack
+
+mv lgnpack ../../exec

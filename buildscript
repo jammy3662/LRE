@@ -1,11 +1,12 @@
 #!/bin/bash
 
 # output folders
+rm -rf bitcode
 mkdir -p bitcode
-mkdir -p exec
-mkdir -p obj
 
-rm -r bitcode/*
+mkdir -p exec
+
+mkdir -p obj
 
 for i in $(ls -d src/*/)
 do
@@ -17,7 +18,6 @@ do
 		echo "└────────────────────────────────"
 		
 		PTH=$(pwd); cd $i
-		echo $PTH
 		
 		./build
 		cd $PTH
@@ -28,9 +28,11 @@ echo "┌───────────────────────�
 echo "│ Generating libraries..."
 echo "└────────────────────────────────"
 
-llvm-link -v bitcode/*.bc -o bitcode/lre.bc
-
-llvm-link -v bitcode/*.bc -o obj/lre.o
+llvm-link -v \
+	src/pack/lgnpack.bc \
+	src/container/cont.bc \
+	src/rend/rend.bc \
+	-o bitcode/lre.bc
 
 echo "┌─────────────────┐"
 echo "│ Build complete. │"
