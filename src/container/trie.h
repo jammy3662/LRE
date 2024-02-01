@@ -1,6 +1,8 @@
 #ifndef TRIE_DOT_H
 #define TRIE_DOT_H
 
+#pragma pack (push, 1)
+
 template <typename val_t, typename leaf_t, val_t END_VAL>
 struct Trie
 {
@@ -16,5 +18,7 @@ struct Trie
 	void insert (const val_t* key, leaf_t result);
 	leaf_t find (const val_t* key);
 };
+
+#pragma pack (pop)
 
 #endif

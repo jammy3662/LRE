@@ -11,70 +11,54 @@
 
 // no padding (single-byte aligned)
 #pragma pack (push, 1)
-
-typedef enum { RGB, GBR, BRG, RBG, GRB, BGR } texel_type;
-typedef int8_t attrib;
-
-typedef int8_t chr;
-typedef int16_t rid; // index into internal buffer of resource pack
-
-namespace res {
 	
 struct Shader
 {
-	const chr* vertexCode;
-	const chr* fragmentCode;
+	//struct
+	//{
+		int8_t* vertex;
+	  int8_t* pixel;
+	//}
+	//code;
 };
 
 struct Texture
 {
-	struct // texture metadata
-	{
-		int8_t type : 2;
-		int8_t channels : 3;
-		int8_t order : 3;
-	}
-	properties;
+	struct // metadata bitfield
+{ int8_t type : 2;
+	int8_t channels : 3;
+	int8_t order : 3; }
+	bits;
 	
 	int16_t width, height, depth;
 	
-	// array of raw texels (could be pixels or voxels, etc)
-	arr <int8_t> texels;
+	int16_t texels;
 };
 
 struct Material
 {
 	float shine, refl;
-	rid diffuse, normal, height, specular;
+	
+	struct
+	{ int16_t diffuse, normal,
+	          height, specular; }
+	texture;
 };
 
 // a collection of vertices amd indices
 struct Mesh
 {
-	int8_t nAttribs;
-	
-	struct // a value associated with each vertex
-	{
-		int8_t type : 4;
-		int8_t count : 4;
+	struct
+	{ int8_t count : 4;
+	  int8_t type : 4;
 	}
 	attribs [8];
 	
-	int32_t nVertices, nIndices;
-
-	arr <float> vertexStream;
-	arr <int16_t> indexStream;
-
-	rid material;
+	int16_t material;
+	
+	struct { int16_t vertex, index; }
+	stream;
 };
-
-// one or more meshes to be drawn as a single object
-struct Model
-{
-	arr <Mesh> meshes;
-};
-
-}
 
 // restore default byte alignment
 #pragma pack (pop)

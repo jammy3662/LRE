@@ -3,6 +3,7 @@
 # output folders
 mkdir -p bitcode
 mkdir -p exec
+mkdir -p obj
 
 rm -r bitcode/*
 
@@ -27,10 +28,9 @@ echo "┌───────────────────────�
 echo "│ Generating libraries..."
 echo "└────────────────────────────────"
 
-BITCODE="$(find bitcode -name '*.bc')"
+llvm-link -v bitcode/*.bc -o bitcode/lre.bc
 
-llvm-link -v $BITCODE -o bitcode/lre.bc
-rm -v $BITCODE
+llvm-link -v bitcode/*.bc -o obj/lre.o
 
 echo "┌─────────────────┐"
 echo "│ Build complete. │"

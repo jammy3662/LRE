@@ -2,10 +2,19 @@
 
 set -e
 
-clang -S -emit-llvm *.cc -std=c++98
+mkdir -p tmp
+cd tmp
 
-FILES=$(find -name '*.ll')
+clang -S -emit-llvm ../*.cc -std=c++98
+llvm-link -v *.ll -o ../container.bc
 
-llvm-link -v -o container.bc $FILES
-rm $FILES
-mv -vu container.bc ../../bitcode/container.bc
+clang -c ../container.bc -o ../container.o
+
+cd ..
+rm -rf tmp
+
+ln -srfv container.bc bitcode/
+ln -srfv container.o obj/
+
+ln -srf container.h include/
+ln -srf trie.h include/

@@ -5,8 +5,10 @@
 
 int main (int argc, char** argv)
 {
-	printf ("Lagoon Resource Pack Tool\n"
-	        "");
+	printf ("┌─────────────────────────────┐\n"
+	        "│  Lagoon Resource Pack Tool  │\n"
+					"└─────────────────────────────┘\n"
+	        "Endianness: '%c'\n", pack::endian);
 	
 	return 0;
 }

@@ -19,36 +19,71 @@ ________________________________________________________________________________
 #include "pack.h"
 #include "resource.h"
 
-using namespace res;
+#include <stdio.h>
 
-const char pack::endian = '0';
+char pack::endian = '?';
 const char* pack::filepath;
 
-// track loaded resources by name and index
-Trie <int8, int16, 0>
-texturenames = {0},
-modelnames = {0};
-
-arr <Shader>
-	shaders = {0};
-
-arr <Texture>
-	textures = {0};
-
-arr <Material>
-	materials = {0};
-
-arr <Mesh>
-	meshes = {0};
-
-arr <Model>
-	models = {0};
+typedef int8_t chr;
 
 struct platform
 {
 	platform ()
 	{ // test byte order only once upfront
-		//pack::endian = bytes::testendian ();
+		pack::endian = bytes::testendian ();
 	}
 }
 platform;
+
+// track loaded resources by name and index
+Trie <chr, rid, 0>
+texturenames = {0},
+modelnames = {0};
+
+// fixed data structures
+// (reference variable length buffers)
+arr<Texture> textures;
+arr<Material> materials;
+arr<Mesh> meshes;
+
+// raw data streams
+// indeterminate size
+arr<Shader> shaders;
+arr<int8_t> imagesBuf;
+arr<float> verticesBuf;
+arr<int16_t> indicesBuf;
+arr<arr<int16_t> > models;
+
+void save (const char* path)
+{
+	FILE* out = fopen (path, "w");
+	
+	// write fixed-size data first, which points to internal 'heap'
+	
+	fprintf (out, "%hu", textures.used);
+	fwrite (textures, sizeof (Texture), textures.used, out);
+
+	fprintf (out, "%hu", materials.used);
+	fwrite (materials, sizeof (Material), materials.used, out);
+
+	fprintf (out, "%hu", meshes.used);
+	fwrite (meshes, sizeof (Mesh), meshes.used, out);
+	
+	// buffers and streams, variable-size data
+	fprintf (out, "%hu", shaders.used);
+	for (int16_t i = 0; i < shaders.used; ++i)
+	{
+		const Shader s = shaders [i];
+		fprintf (out, "%s", s.vertex);
+		fprintf (out, "%s", s.pixel);
+	}
+	
+	fprintf (out, "%hu", models.used);
+	for (int16_t i = 0; i < models.used; ++i)
+	{
+		arr<int16_t> mdl = models [i];
+		
+		fprintf (out, "%hu", mdl.used);
+		fwrite (mdl, sizeof (int16_t), mdl.used, out);
+	}
+}

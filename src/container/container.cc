@@ -1,32 +1,53 @@
 #include "container.h"
 
-#include <math.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
 
-template <class T>
-void arr <T>::allocate (int num)
+static int roundNearest (float f)
 {
-	buf = realloc (buf, num * sizeof (T));
-	available = num;
+	return (int) (f + 0.5);
 }
 
-template <class T>
-void arr <T>::expand ()
+template <typename T>
+void arr<T>::allocate (int16_t n)
 {
-	// double the current capacity
-	// or allocate the first element
-	int newsz = (available ? available : 1);
-	newsz *= (int)ceil(1.5);
-	available = newsz;
+	used = 0;
+	available = n;
+	buf = realloc (buf, n * sizeof(T));
+}
+
+template <typename T>
+int16_t arr<T>::expand ()
+{
+	int16_t prev = available;
+	// add 50% size of the current used elements
+	available = roundNearest ((float)available * 1.5);
 	
-	buf = (T*) realloc (buf, newsz * sizeof (T));
+	buf = (T*) realloc (buf, available * sizeof(T));
+	
+	return available - prev;
 }
 
-template <class T>
-void arr <T>::append (T& next)
+template <typename T>
+int16_t arr<T>::append (T& next)
 {
+	int16_t added;
+	
 	if (used >= available)
-		expand ();
+		added = expand ();
 	
 	buf [used] = next;
-	next++;
+	
+	used++;
+	return added;
+}
+
+template <typename T>
+int16_t arr<T>::shrink ()
+{
+	int16_t unused = available - used;
+	buf = realloc (buf, used * sizeof(T));
+	available = used;
+	return unused;
 }
