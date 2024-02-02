@@ -13,9 +13,7 @@ do
 	if [[ -e $i/build ]]
 	then
 		
-		echo "┌────────────────────────────────"
-		echo "│ Building in $i..."
-		echo "└────────────────────────────────"
+		echo "▶▶▶ Building in $i"
 		
 		PTH=$(pwd); cd $i
 		
@@ -24,9 +22,7 @@ do
 	fi
 done
 
-echo "┌────────────────────────────────"
-echo "│ Generating libraries..."
-echo "└────────────────────────────────"
+echo "▶▶▶ Generating libraries..."
 
 llvm-link -v \
 	src/pack/lgnpack.bc \
@@ -34,6 +30,4 @@ llvm-link -v \
 	src/rend/rend.bc \
 	-o bitcode/lre.bc
 
-echo "┌─────────────────┐"
-echo "│ Build complete. │"
-echo "└─────────────────┘"
+echo "▶▶▶ Build complete."

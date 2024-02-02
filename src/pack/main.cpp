@@ -14,7 +14,10 @@ void nop(int, char**){};
 
 void help (int, char**)
 {
-	printf ("lgnpack - Combine external resources into a compact resource pack binary\n");
+	const char* helpmsg =
+	"lgnpack - Combine external resources into a compact resource pack binary\n"
+	;
+	printf ("%s", helpmsg);
 }
 
 void endian (int, char**)
@@ -38,24 +41,24 @@ enum OP
 	LIST, ADD, SUB, END
 };
 
+// initialize prefix tree with some function
+// calls in a constructor
 struct _setupOptionTree
+{ _setupOptionTree()
 {
-	_setupOptionTree()
-	{
-		options.insert ("help", INFO);
-		
-		options.insert ("load", LOAD);
-		options.insert ("save", SAVE);
-		
-		options.insert ("get", GET);
-		options.insert ("list", LIST);
-		options.insert ("ls", LIST);
-		options.insert ("add", ADD);
-		options.insert ("rm", SUB);
-		
-		options.insert ("end", END);
-	}
-}
+	options.insert ("help", INFO);
+	
+	options.insert ("load", LOAD);
+	options.insert ("save", SAVE);
+	
+	options.insert ("get", GET);
+	options.insert ("list", LIST);
+	options.insert ("ls", LIST);
+	options.insert ("add", ADD);
+	options.insert ("rm", SUB);
+	
+	options.insert ("end", END);
+}}
 _;
 
 int main (int argc, char** argv)
@@ -72,7 +75,7 @@ int main (int argc, char** argv)
 	if (cmd <= sizeof commands / sizeof *commands)
 		commands[cmd](argc, argv);
 	
-	if (cmd == END) printf ("Endianness: '%c'\n", pack::endian);
+	if (argc > 2) printf ("Found %i args\n", argc-2);
 	
 	return 0;
 }
