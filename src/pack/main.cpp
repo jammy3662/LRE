@@ -10,21 +10,27 @@ const char* usage =
 "└─────────────────────────────┘\n"
 "(Run with command 'help' for more options.)\n";
 
-enum OP
+void help (int, char**)
 {
-	INFO=1,
-	
-	LOAD,
-	SAVE,
-	
-	GET,
-	LIST,
-	
-	ADD,
-	SUB,
-};
+	printf ("lgnpack - Combine external resources into a compact resource pack binary\n");
+}
+
+typedef void (* handler) (int, char**);
+handler commands [] = { help };
 
 Trie <char, int, 0> options;
+
+enum OP
+{
+	INFO,
+	LOAD,
+	SAVE,
+	GET,
+	LIST,
+	ADD,
+	SUB,
+	END
+};
 
 struct _setupOptionTree
 {
@@ -40,14 +46,14 @@ struct _setupOptionTree
 		options.insert ("ls", LIST);
 		options.insert ("add", ADD);
 		options.insert ("rm", SUB);
+		
+		options.insert ("end", END);
 	}
 }
 _;
 
 int main (int argc, char** argv)
 {
-	printf ("Endianness: '%c'\n", pack::endian);
-	
 	if (argc < 2)
 	{
 		fputs (usage, stdout);
@@ -56,6 +62,11 @@ int main (int argc, char** argv)
 	
 	int cmd = options.find (argv [1]);
 	printf ("%s: %i\n", argv[1], cmd);
+	
+	if (cmd <= sizeof commands / sizeof *commands)
+		commands[cmd](argc, argv);
+	
+	if (cmd == END) printf ("Endianness: '%c'\n", pack::endian);
 	
 	return 0;
 }
