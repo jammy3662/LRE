@@ -6,71 +6,72 @@
 #include <stdlib.h>
 #include <string.h>
 
-template <typename val, typename leaf, val END>
-void Trie <val,leaf,END>::insert (const val* key, leaf result)
+#define TrieC Trie<KeyT,END,ValT,NUL>
+
+template <typename KeyT, KeyT END, typename ValT, ValT NUL>
+void TrieC::insert (const KeyT* key, ValT val)
 {
-	Trie <val,leaf,END>* tree = this;
-	leaf* last = &tree->result;
+	TrieC* tree = this;
+	ValT* last = &tree->val;
 	
 	while (*key != END)
 	{
-		if (tree->value == END)
-			tree->value = *key;
+		if (tree->key == END)
+			tree->key = *key;
 		
-		while (*key != tree->value)
+		while (*key != tree->key)
 		{
 			if (!tree->next)
 			{
 				tree->next = (Trie*) malloc (sizeof *this);
 				memset (tree->next, 0, sizeof *this);
-				tree->next->value = *key;
+				tree->next->key = *key;
 			}
 			
 			tree = tree->next;
 		}
 		
-		last = &tree->result;
+		last = &tree->val;
 		
 		if (!tree->match)
 		{
 			tree->match = (Trie*) malloc (sizeof *this);
 			memset (tree->match, 0, sizeof *this);
-			tree->match->value = END;
+			tree->match->key = END;
 		}
 		tree = tree->match;
 		
 		key++;
 	}
 	
-	//free (tree);
-	*last = result;
+	*last = val;
 }
 
-template <typename val, typename leaf, val END>
-leaf Trie <val,leaf,END>::find (const val* key)
+template <typename KeyT, KeyT END, typename ValT, ValT NUL>
+ValT TrieC::find (const KeyT* key)
 {
-	Trie <val,leaf,END>* tree = this;
+	TrieC* tree = this;
 	
-	leaf result = 0;
+	ValT ret = NUL;
 	
 	while (*key != END)
 	{
 		// try to match the character at this level
-		while (*key != tree->value)
+		while (*key != tree->key)
 		{
 			// no more characters to test against
-			if (!tree->next) return 0;
+			if (!tree->next) return NUL;
 			
 			tree = tree->next;
 		}
 		
-		result = tree->result;
+		ret = tree->val;
 		
 		if (tree->match) tree = tree->match;
 		key++;
 	}
 	
-	return result;
+	return ret;
 }
 
 #endif

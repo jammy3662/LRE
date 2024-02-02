@@ -3,11 +3,11 @@
 
 #pragma pack (push, 1)
 
-template <typename val_t, typename leaf_t, val_t EndVal>
+template <typename KeyT, KeyT END, typename ValT, ValT NUL>
 struct Trie
 {
-	val_t value;
-	leaf_t result;
+	KeyT key;
+	ValT val;
 	
 	Trie* next;
 	Trie* match;
@@ -15,8 +15,8 @@ struct Trie
 	// TODO: write a trie "compress" function that
 	// groups sequential characters into a single node
 	
-	void insert (const val_t* key, leaf_t result);
-	leaf_t find (const val_t* key);
+	void insert (const KeyT* key, ValT val);
+	ValT find (const KeyT* key);
 };
 
 #include "trie.cc.h"

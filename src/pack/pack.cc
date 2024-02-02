@@ -36,7 +36,7 @@ struct platform
 platform;
 
 // track loaded resources by name and index
-Trie <chr, rid, 0>
+Trie <chr, 0, rid, -1>
 texturenames = {0},
 modelnames = {0};
 

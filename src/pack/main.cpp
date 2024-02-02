@@ -10,26 +10,32 @@ const char* usage =
 "└─────────────────────────────┘\n"
 "(Run with command 'help' for more options.)\n";
 
+void nop(int, char**){};
+
 void help (int, char**)
 {
 	printf ("lgnpack - Combine external resources into a compact resource pack binary\n");
 }
 
-typedef void (* handler) (int, char**);
-handler commands [] = { help };
+void endian (int, char**)
+{
+	printf ("'%c' - current endianness\n", pack::endian);
+}
 
-Trie <char, int, 0> options;
+typedef void (* handler) (int, char**);
+handler commands [] =
+{
+	help,
+	nop, nop, nop, nop, nop, nop,
+	endian
+};
+
+Trie <char, 0, int, -1> options;
 
 enum OP
 {
-	INFO,
-	LOAD,
-	SAVE,
-	GET,
-	LIST,
-	ADD,
-	SUB,
-	END
+	INFO, LOAD, SAVE, GET,
+	LIST, ADD, SUB, END
 };
 
 struct _setupOptionTree
