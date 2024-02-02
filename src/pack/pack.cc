@@ -48,44 +48,47 @@ arr<Mesh> meshes;
 
 // raw data streams
 // indeterminate size
-arr<Shader> shaders;
-arr<int8_t> imagesBuf;
-arr<float> verticesBuf;
-arr<int16_t> indicesBuf;
-arr<arr<int16_t> > models;
+arr<int8_t> shaders;
+arr<int8_t> images;
+arr<float> vertices;
+arr<int16_t> indices;
+arr<int16_t> models;
+
+template <typename T>
+void writearr (arr<T> src, FILE* dst)
+{
+	fprintf (dst, "%hu", src.count);
+	fwrite (src, sizeof(T), src.count, dst);
+}
+
+template <typename T>
+void readarr (FILE* src, arr<T>& dst)
+{
+	fscanf (src, "%hu", &dst.count);
+	dst.allocate (dst.count);
+	fread (dst, sizeof(T), dst.count, src);
+}
 
 void save (const char* path)
 {
 	FILE* out = fopen (path, "w");
 	
-	// write fixed-size data first, which points to internal 'heap'
+	if (out == 0)
+	{
+		fprintf (stderr, "Can't save the resource pack at the given location. ('%s')\n", path);
+		return;
+	}
 	
-	fprintf (out, "%hu", textures.count);
-	fwrite (textures, sizeof (Texture), textures.count, out);
-
-	fprintf (out, "%hu", materials.count);
-	fwrite (materials, sizeof (Material), materials.count, out);
-
-	fprintf (out, "%hu", meshes.count);
-	fwrite (meshes, sizeof (Mesh), meshes.count, out);
+	writearr (textures, out);
+	writearr (materials, out);
+	writearr (meshes, out);
 	
 	// buffers and streams, variable-size data
-	fprintf (out, "%hu", shaders.count);
-	for (int16_t i = 0; i < shaders.count; ++i)
-	{
-		const Shader s = shaders [i];
-		fprintf (out, "%s", s.vertex);
-		fprintf (out, "%s", s.pixel);
-	}
-	
-	fprintf (out, "%hu", models.count);
-	for (int16_t i = 0; i < models.count; ++i)
-	{
-		arr<int16_t> mdl = models [i];
-		
-		fprintf (out, "%hu", mdl.count);
-		fwrite (mdl, sizeof (int16_t), mdl.count, out);
-	}
+	writearr (shaders, out);
+	writearr (images, out);
+	writearr (vertices, out);
+	writearr (indices, out);
+	writearr (models, out);
 	
 	fclose (out);
 }
@@ -94,24 +97,22 @@ void load (const char* path)
 {
 	FILE* in = fopen (path, "r");
 	
-	fscanf (in, "%hu", &textures.count);
-	textures.allocate (textures.count);
-	for (int i = 0; i < textures.count; ++i)
+	if (in == 0)
 	{
-		fread (textures, sizeof (Texture), textures.count, in);
+		fprintf (stderr, "Can't open the file or resource pack. ('%s')\n", path);
+		return;
 	}
 	
-	fscanf (in, "%hu", &materials.count);
-	materials.allocate (materials.count);
-	for (int i = 0; i < materials.count; ++i)
-	{
-		fread (materials, sizeof (Material), materials.count, in);
-	}
+	readarr (in, textures);
+	readarr (in, materials);
+	readarr (in, meshes);
 	
-	fscanf (in, "%hu", &meshes.count);
-	textures.allocate (meshes.count);
-	for (int i = 0; i < meshes.count; ++i)
-	{
-		fread (meshes, sizeof (Mesh), meshes.count, in);
-	}
+	// buffers and streams, variable-size data
+	readarr (in, shaders);
+	readarr (in, images);
+	readarr (in, vertices);
+	readarr (in, indices);
+	readarr (in, models);
+	
+	fclose (in);
 }

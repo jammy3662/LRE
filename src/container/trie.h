@@ -19,6 +19,8 @@ struct Trie
 	leaf_t find (const val_t* key);
 };
 
+#include "trie.cc.h"
+
 #pragma pack (pop)
 
 #endif

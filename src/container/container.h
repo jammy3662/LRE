@@ -16,7 +16,7 @@ struct arr
 	void allocate (int16_t num);
 	int16_t expand (); // allocate 50% more space (returns # new elements)
 	int16_t shrink (); // deallocate all unused elements (returns # unused elements)
-	void empty (); // deallocate all memory
+	void clear (); // deallocate all memory
 	
 	T& operator [] (int16_t idx) {return buf[idx];};
 	operator T* () {return buf;}

@@ -5,10 +5,10 @@ set -e
 mkdir -p tmp
 cd tmp
 
-clang -S -emit-llvm ../*.cc -std=c++98
-llvm-link -v *.ll -o ../cont.bc
+#clang -S -emit-llvm ../*.cc -std=c++98
+#llvm-link -v *.ll -o ../cont.bc
 
 cd ..
 rm -rf tmp
 
-clang -c cont.bc -o cont.o
+#clang -c cont.bc -o cont.o
