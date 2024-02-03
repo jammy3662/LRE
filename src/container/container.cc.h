@@ -13,7 +13,7 @@ static int roundNearest (float f)
 }
 
 template <typename T>
-void arr<T>::allocate (int16_t n)
+void arr<T>::allocate (uint32_t n)
 {
 	clear ();
 	count = 0;
@@ -22,9 +22,9 @@ void arr<T>::allocate (int16_t n)
 }
 
 template <typename T>
-int16_t arr<T>::expand ()
+uint32_t arr<T>::expand ()
 {
-	int16_t prev = available;
+	uint32_t prev = available;
 	// add 50% size of the current used elements
 	available = roundNearest ((float)available * 1.5);
 	
@@ -34,9 +34,9 @@ int16_t arr<T>::expand ()
 }
 
 template <typename T>
-int16_t arr<T>::append (T& next)
+uint32_t arr<T>::append (T& next)
 {
-	int16_t added;
+	uint32_t added;
 	
 	if (count >= available)
 		added = expand ();
@@ -48,9 +48,9 @@ int16_t arr<T>::append (T& next)
 }
 
 template <typename T>
-int16_t arr<T>::shrink ()
+uint32_t arr<T>::shrink ()
 {
-	int16_t unused = available - count;
+	uint32_t unused = available - count;
 	buf = (T*) realloc (buf, count * sizeof(T));
 	available = count;
 	return unused;

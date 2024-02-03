@@ -8,17 +8,17 @@
 template <typename T>
 struct arr
 {
-	int16_t count, available;
+	uint32_t count, available;
 	
 	T* buf;
 	
-	int16_t append (T& next); // returns # of new elements allocated
-	void allocate (int16_t num);
-	int16_t expand (); // allocate 50% more space (returns # new elements)
-	int16_t shrink (); // deallocate all unused elements (returns # unused elements)
+	uint32_t append (T& next); // returns # of new elements allocated
+	void allocate (uint32_t num);
+	uint32_t expand (); // allocate 50% more space (returns # new elements)
+	uint32_t shrink (); // deallocate all unused elements (returns # unused elements)
 	void clear (); // deallocate all memory
 	
-	T& operator [] (int16_t idx) {return buf[idx];};
+	T& operator [] (uint32_t idx) {return buf[idx];};
 	operator T* () {return buf;}
 };
 
