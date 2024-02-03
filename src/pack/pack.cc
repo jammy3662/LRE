@@ -49,21 +49,24 @@ arr<Mesh> meshes;
 // indeterminate size
 arr<int8_t> shaders;
 arr<int8_t> images;
-arr<float> vertices;
+arr<int8_t> vertices;
 arr<int16_t> indices;
 arr<int16_t> models;
 
 template <typename T>
 void writearr (arr<T> src, FILE* dst)
 {
-	fprintf (dst, "%hu", src.count);
+	uint32_t u = pack::endian == 'b' ? src.count : bytes::bswap ((int32_t)src.count);
+	fwrite(&u, 1, sizeof(u), dst);
 	fwrite (src, sizeof(T), src.count, dst);
 }
 
 template <typename T>
 void readarr (FILE* src, arr<T>& dst)
 {
-	fscanf (src, "%hu", &dst.count);
+	int32_t u;
+	fread(&u, 1, sizeof(u), src);
+	dst.count = pack::endian == 'b' ? u : bytes::bswap (u);
 	dst.allocate (dst.count);
 	fread (dst, sizeof(T), dst.count, src);
 }
