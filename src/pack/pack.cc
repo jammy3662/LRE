@@ -56,18 +56,22 @@ arr<int16_t> models;
 template <typename T>
 void writearr (arr<T> src, FILE* dst)
 {
-	uint32_t u = pack::endian == 'b' ? src.count : bytes::bswap ((int32_t)src.count);
-	fwrite(&u, 1, sizeof(u), dst);
+	if (pack::endian == 'b') src.count = bytes::bswap (src.count);
+	
+	fwrite (&src.count, sizeof src.count, 1, dst);
+	
 	fwrite (src, sizeof(T), src.count, dst);
 }
 
 template <typename T>
 void readarr (FILE* src, arr<T>& dst)
 {
-	int32_t u;
-	fread(&u, 1, sizeof(u), src);
-	dst.count = pack::endian == 'b' ? u : bytes::bswap (u);
+	fread (&dst.count, sizeof dst.count, 1, src);
+	
+	if (pack::endian == 'b') dst.count = bytes::bswap (dst.count);
+	
 	dst.allocate (dst.count);
+	
 	fread (dst, sizeof(T), dst.count, src);
 }
 

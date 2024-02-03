@@ -5,10 +5,8 @@
 #include "trie.h"
 
 const char* usage =
-"┌─────────────────────────────┐\n"
-"│ USAGE: lgnpack [CMD] [ARGS] │\n"
-"└─────────────────────────────┘\n"
-"(Run with command 'help' for more options.)\n";
+"USAGE: lgnpack [CMD] [ARGS] \n"
+"(Run with command 'help' for more options.) \n";
 
 void nop(int, char**){};
 
