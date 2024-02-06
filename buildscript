@@ -24,10 +24,8 @@ done
 
 echo "▶▶▶ Generating libraries..."
 
-llvm-link -v \
-	src/pack/lgnpack.bc \
-	src/container/cont.bc \
-	src/rend/rend.bc \
-	-o bitcode/lre.bc
+cd src
+llvm-link -v "$(find -name '*.bc')" -o ../bitcode/lre.bc
+cd ..
 
 echo "▶▶▶ Build complete."

@@ -33,9 +33,8 @@ void TrieC::insert (const KeyT* key, ValT val)
 		{
 			if (!tree->next)
 			{
-				tree->next = (Trie*) malloc (sizeof *this);
-				TrieC tmp;
-				*tree->next = tmp;
+				tree->next = (Trie*) malloc (sizeof (TrieC));
+				TrieC tmp; *tree->next = tmp;
 				tree->next->key = *key;
 			}
 			
@@ -46,9 +45,8 @@ void TrieC::insert (const KeyT* key, ValT val)
 		
 		if (!tree->match)
 		{
-			tree->match = (Trie*) malloc (sizeof *this);
-			TrieC tmp;
-			*tree->match = tmp;
+			tree->match = (Trie*) malloc (sizeof (TrieC));
+			TrieC tmp; *tree->match = tmp;
 			tree->match->key = END;
 		}
 		tree = tree->match;
