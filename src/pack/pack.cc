@@ -36,8 +36,8 @@ platform;
 
 // track loaded resources by name and index
 Trie <chr, 0, rid, -1>
-texturenames = {0},
-modelnames = {0};
+texturenames,
+modelnames;
 
 // fixed data structures
 // (reference variable length buffers)

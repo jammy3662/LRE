@@ -7,8 +7,18 @@
 #include <string.h>
 
 #define TrieC Trie<KeyT,END,ValT,NUL>
+#define TrieT <typename KeyT, KeyT END, typename ValT, ValT NUL>
 
-template <typename KeyT, KeyT END, typename ValT, ValT NUL>
+template TrieT
+TrieC::Trie ()
+{
+	key = END;
+	val = NUL;
+	next = 0;
+	match = 0;
+}
+
+template TrieT
 void TrieC::insert (const KeyT* key, ValT val)
 {
 	TrieC* tree = this;
@@ -24,7 +34,8 @@ void TrieC::insert (const KeyT* key, ValT val)
 			if (!tree->next)
 			{
 				tree->next = (Trie*) malloc (sizeof *this);
-				memset (tree->next, 0, sizeof *this);
+				TrieC tmp;
+				*tree->next = tmp;
 				tree->next->key = *key;
 			}
 			
@@ -36,7 +47,8 @@ void TrieC::insert (const KeyT* key, ValT val)
 		if (!tree->match)
 		{
 			tree->match = (Trie*) malloc (sizeof *this);
-			memset (tree->match, 0, sizeof *this);
+			TrieC tmp;
+			*tree->match = tmp;
 			tree->match->key = END;
 		}
 		tree = tree->match;
@@ -47,7 +59,7 @@ void TrieC::insert (const KeyT* key, ValT val)
 	*last = val;
 }
 
-template <typename KeyT, KeyT END, typename ValT, ValT NUL>
+template TrieT
 ValT TrieC::find (const KeyT* key)
 {
 	TrieC* tree = this;

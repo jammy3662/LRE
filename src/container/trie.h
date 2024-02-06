@@ -17,6 +17,8 @@ struct Trie
 	
 	void insert (const KeyT* key, ValT val);
 	ValT find (const KeyT* key);
+	
+	Trie();
 };
 
 #include "trie.cc.h"

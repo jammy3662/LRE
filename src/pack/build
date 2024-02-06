@@ -16,6 +16,6 @@ cd ..
 rm -rf tmp
 
 clang -c lgnpack.bc -o lgnpack.o
-clang main.cpp lgnpack.bc -I$INCPATH -o lgnpack  -lncurses
+clang main.cpp lgnpack.bc -I$INCPATH -o lgnpack -g3 -lncurses
 
 ln -srfv lgnpack ../../exec
