@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 INCPATH=$(realpath ../../include/)
 
 CLANGFLAGS="-std=c++98 -I$INCPATH -Wno-writable-strings"
@@ -9,13 +7,14 @@ CLANGFLAGS="-std=c++98 -I$INCPATH -Wno-writable-strings"
 mkdir -p tmp
 cd tmp
 
-clang -S -emit-llvm $CLANGFLAGS ../*.cc -std=c++98
+clang -S -emit-llvm $CLANGFLAGS ../*.cc -std=c++98 -g3
 llvm-link -v *.ll -o ../lgnpack.bc
 
 cd ..
 rm -rf tmp
 
-clang -c lgnpack.bc -o lgnpack.o
-clang main.cpp lgnpack.bc -I$INCPATH -o lgnpack -g3 -lncurses
+clang -c lgnpack.bc -o lgnpack.o -g3
+clang -c main.cpp -I$INCPATH -g3 -lncurses
+clang main.o lgnpack.o -o lgnpack -g3
 
 ln -srfv lgnpack ../../exec

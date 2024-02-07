@@ -15,13 +15,16 @@ ________________________________________________________________________________
 #include "container.h"
 #include "trie.h"
 #include "bytes.h"
+#include "import.h"
 #include "pack.h"
 #include "resource.h"
 
 #include <stdio.h>
 
-char pack::endian = '?';
-const char* pack::filepath;
+namespace pack {
+
+char endian = '?';
+const char* filepath;
 
 typedef int8_t chr;
 
@@ -29,7 +32,7 @@ struct platform
 {
 	platform ()
 	{ // test byte order only once upfront
-		pack::endian = bytes::testendian ();
+		endian = bytes::testendian ();
 	}
 }
 platform;
@@ -122,3 +125,20 @@ void load (const char* path)
 	
 	fclose (in);
 }
+
+void loadShader (const char* vs, const char* fs)
+{
+	int vln, sln, ct;
+	int8_t* str = loader::importShader (vs, fs, &vln, &sln);
+	
+	if (!str) return;
+	
+	ct = vln + sln;
+	
+	// add shaders to the end of the giant buffer
+	shaders.allocate (ct + shaders.count + 1);
+	memcpy (shaders.buf + shaders.count, str, ct);
+	shaders.count = shaders.available;
+}
+
+} // namespace

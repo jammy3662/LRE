@@ -62,7 +62,7 @@ void arr<T>::clear ()
 	if (!buf) return;
 	
 	free (buf);
-	arr<T> newarr = {0};
+	arr<T> newarr;
 	
 	*this = newarr;
 }

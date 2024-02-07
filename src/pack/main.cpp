@@ -3,12 +3,13 @@
 
 #include "pack.h"
 #include "trie.h"
+#include "import.h"
 
 #include <ncurses.h>
 
 enum OP
 {
-	ABOUT, LIST, NEW, ADD, SUB
+	ABOUT, LIST, NEW, ADD, SUB, OP_CT
 };
 
 const char* mainHelp =
@@ -43,7 +44,7 @@ const char* newHelp =
 "-------------------------\n"
 "Create an empty resource pack at the given filepath.\n"
 "f ~ overwrite the file at the given path if it exists\n"
-"v ~ show a message if an existing file was overwritten\n"
+"v ~ show a message if a file was replaced\n"
 ;
 const char* addHelp =
 "__________________________________________\n"
@@ -64,12 +65,56 @@ const char* subHelp =
 const char* helpStrings [] =
 { mainHelp, help, listHelp, newHelp, addHelp, subHelp };
 
+void newPack (int argc, char** args)
+{
+	bool overwrite = false, verbose = false;
+	
+	if (argc > 1)
+	{
+	// parse options
+	char* c = args[1];
+	if (*c == '-') ++c;
+	for (; *c != 0; ++c)
+	switch (*c)
+	{
+		case 'f':
+			overwrite = true;
+			break;
+		case 'v':
+			verbose = true;
+			break;
+		
+		default:
+			fprintf (stderr, "[o] '%c' Unknown option (ignored)\n", *c);
+			break;
+	}}
+	
+	const char* path = args [0];
+	FILE* dst = fopen (path, "r");
+	
+	// file already exists
+	if (dst != 0x0)
+	{
+		if (!overwrite)
+		{
+			fprintf (stderr, "[x] File at '%s' already exists (cancelled)\n", path);
+			fclose (dst);
+			return;
+		}
+		
+		if (verbose)
+			fprintf (stderr, "[o] Replaced file at '%s'\n", path);
+	}
+	
+	pack::save (path);
+}
+
 void nop(int, char**){};
 
 typedef void (* handler) (int, char**);
 handler commands [] =
 {
-	nop, nop, nop, nop, nop
+	nop, nop, newPack, nop, nop, nop,
 };
 
 // initialize prefix tree with some function
@@ -91,15 +136,20 @@ int main (int argc, char** argv)
 {
 	if (argc < 2)
 	{
-		printf ("%s", mainHelp);
+		fprintf (stderr, "%s", mainHelp);
 		return 1;
 	}
 	
 	int cmd = options.find (argv [1]);
 	
-	if (argc < 3)
-		printf ("%s", helpStrings [cmd+1]);
+	if (argc < 3 or cmd == -1)
+	{
+		fprintf (stderr, "%s", helpStrings [cmd+1]);
+		return 2;
+	}
+	
+	pack::loadShader ("SHADER", "SHADER");
 	
 	if (cmd <= sizeof commands / sizeof *commands)
-		commands[cmd](argc, argv);
+		commands[cmd](argc-2, argv+2);
 }

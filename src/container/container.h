@@ -20,6 +20,7 @@ struct arr
 	
 	T& operator [] (uint32_t idx) {return buf[idx];};
 	operator T* () {return buf;}
+	arr () {count = 0; available = 0; buf = 0;};
 };
 
 #include "container.cc.h"

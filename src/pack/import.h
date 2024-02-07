@@ -11,11 +11,15 @@
 #include "container.h"
 #include "resource.h"
 
-Shader importShader (const char* vrtPath, const char* pixPath);
+namespace loader {
+
+int8_t* importShader (const char* vrtPath, const char* pixPath, int* vrtLen = 0x0, int* pixLen = 0x0);
 Texture importTexture (const char* path);
 
 // import meshes from '.obj' file, including
 // any attached textures and materials
 arr<int16_t> importModel ();
+
+} // namespace
 
 #endif

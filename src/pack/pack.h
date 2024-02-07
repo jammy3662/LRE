@@ -21,6 +21,8 @@ namespace pack
 	void save (const char* path = filepath); // only for editing a pack
 	void load (const char* path);
 	
+	void loadShader (const char* vertex, const char* pixel);
+	
 	rid texture (const char* name);
 	rid model (const char* name);
 	rid pipe (const char* name);
