@@ -13,12 +13,17 @@
 
 namespace loader {
 
-int8_t* importShader (const char* vrtPath, const char* pixPath, int* vrtLen = 0x0, int* pixLen = 0x0);
-Texture importTexture (const char* path);
+using namespace ir;
 
-// import meshes from '.obj' file, including
-// any attached textures and materials
-arr<int16_t> importModel ();
+// index into interal pack array
+typedef int16_t rsid;
+
+void importShader (const char* vrtPath, const char* pixPath);
+void importTexture (const char* path);
+void importModel (const char* path);
+
+/* TODO: write the file format */
+void importPipeline (const char* path);
 
 } // namespace
 

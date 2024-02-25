@@ -1,32 +1,91 @@
-/*
-________________________________________________________________________________________________________________________________
-|
-| To guarantee platform independent output:
-|
-| - using fixed-size int types (stdint.h)
-| - floats match standard IEEE 754 (for most architectures)
-| - storing data as little endian internally
-| - checking and converting endianness at runtime
-| - no byte padding
-|
-|________________________________________________________________________________________________________________________________
-*/
+//________________________________________________________________________________________________________________________________
+//|
+//| To guarantee platform independent output:
+//|
+//| - using fixed-size int types (stdint.h)
+//| - floats match standard IEEE 754 (for most architectures)
+//| - storing data as little endian internally
+//| - checking and converting endianness at runtime
+//| - no byte padding
+//|
+//|________________________________________________________________________________________________________________________________
 
 #include "container.h"
+
+#include "pack.h"
+#include "pack.dev.h"
+
 #include "trie.h"
 #include "bytes.h"
 #include "import.h"
-#include "pack.h"
+
 #include "resource.h"
 
 #include <stdio.h>
 
-namespace pack {
+void pack::insert (Shader shr) {}
+void pack::insert (Material mtl) {}
+void pack::insert (Texture txr) {}
+void pack::insert (Mesh msh) {}
+
+using namespace ir;
 
 char endian = '?';
-const char* filepath;
+const char* filepath = 0x0;
 
-typedef int8_t chr;
+template <typename T>
+T reord (T t)
+{ return t; }
+
+Shader reord (Shader shr)
+{
+	// shader code uses single-byte chars
+	// no conversion needed
+	return shr;
+}
+
+Material reord (Material mtl)
+{
+	if (pack::endian != 'l')
+	{
+		mtl.shine = bytes::bswap (mtl.shine);
+		mtl.refl = bytes::bswap (mtl.refl);
+		
+		mtl.texture.diffuse = bytes::bswap (mtl.texture.diffuse);
+		mtl.texture.normal = bytes::bswap (mtl.texture.normal);
+		mtl.texture.height = bytes::bswap (mtl.texture.height);
+		mtl.texture.specular = bytes::bswap (mtl.texture.specular);
+	}
+	return mtl;
+}
+
+Texture reord (Texture txr)
+{
+	if (pack::endian != 'l')
+	{
+		txr.bits = bytes::bswap (txr.bits);
+		txr.width = bytes::bswap (txr.width);
+		txr.height = bytes::bswap (txr.height);
+		txr.depth = bytes::bswap (txr.depth);
+		txr.texels = bytes::bswap (txr.texels);
+	}
+	return txr;
+}
+
+Mesh reord (Mesh msh)
+{
+	if (pack::endian != 'l')
+	{
+		for (int i = 0; i < 8; ++i)
+		{
+			msh.attribs [i] = bytes::bswap (msh.attribs [i]);
+			msh.material = bytes::bswap (msh.material);
+			msh.stream.vertex = bytes::bswap (msh.stream.vertex);
+			msh.stream.index = bytes::bswap (msh.stream.index);
+		}
+	}
+	return msh;
+}
 
 struct platform
 {
@@ -38,7 +97,7 @@ struct platform
 platform;
 
 // track loaded resources by name and index
-Trie <chr, 0, rid, -1>
+Trie <int8_t, 0, rid, -1>
 texturenames,
 modelnames;
 
@@ -60,6 +119,11 @@ template <typename T>
 void writearr (arr<T> src, FILE* dst)
 {
 	if (pack::endian == 'b') src.count = bytes::bswap ((int16_t) src.count);
+	
+	for (int i = 0; i < src.count; ++i)
+	{
+		src [i] = reord (src [i]);
+	}
 	
 	fwrite (&src.count, sizeof src.count, 1, dst);
 	
@@ -129,16 +193,7 @@ void load (const char* path)
 void loadShader (const char* vs, const char* fs)
 {
 	int vln, sln, ct;
-	int8_t* str = loader::importShader (vs, fs, &vln, &sln);
-	
-	if (!str) return;
-	
-	ct = vln + sln;
-	
-	// add shaders to the end of the giant buffer
-	shaders.allocate (ct + shaders.count + 1);
-	memcpy (shaders.buf + shaders.count, str, ct);
-	shaders.count = shaders.available;
+	loader::importShader (vs, fs);
 }
 
 } // namespace

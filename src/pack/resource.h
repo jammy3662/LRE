@@ -1,17 +1,19 @@
 #ifndef RESOURCE_DOT_H
 #define RESOURCE_DOT_H
 
-/*________________________________________________________________
-|
-| Memory layout of resources in IR (intermediate representation).
-|________________________________________________________________*/
+//________________________________________________________________
+//|
+//| Memory layout of resources in IR (intermediate representation).
+//|________________________________________________________________
 
 #include <stdint.h>
 #include "container.h"
 
+namespace ir {
+
 // no padding (single-byte aligned)
 #pragma pack (push, 1)
-	
+
 struct Shader
 {
 	int8_t* vertex;
@@ -20,11 +22,13 @@ struct Shader
 
 struct Texture
 {
-	struct // metadata bitfield
-{ int8_t type : 2;
-	int8_t channels : 3;
-	int8_t order : 3; }
-	bits;
+	// T - dimensionality
+	// C - # channels
+	// R - rgb order
+	// ~~~~~~~~~
+	// TT CC CR RR
+	// ~~~~~~~~~
+	int8_t bits;
 	
 	int16_t width, height, depth;
 	
@@ -44,17 +48,20 @@ struct Material
 // a collection of vertices amd indices
 struct Mesh
 {
-	struct
-	{ int8_t count : 4;
-	  int8_t type : 4;
-	}
-	attribs [8];
+	// C - # values
+	// T - type of value
+	// ~~~~~~~~~
+	// CCCC TTTT
+	// ~~~~~~~~~
+	int8_t attribs [8];
 	
 	int16_t material;
 	
 	struct { int16_t vertex, index; }
 	stream;
 };
+
+} // namespace
 
 // restore default byte alignment
 #pragma pack (pop)

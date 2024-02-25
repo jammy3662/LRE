@@ -5,12 +5,19 @@
 #define TINYOBJ_LOADER_C_IMPLEMENTATION
 #include "tinyobj_loader_c.h"
 
+#include "pack.dev.h"
+
 namespace loader {
 
-int8_t* importShader (const char* vs, const char* ps, int* lenVs, int* lenPs)
+void importShader (const char* vs, const char* ps)
 {
+	Shader shr;
+	
 	FILE* vert;
 	FILE* pixl;
+	
+	arr<int8_t> vertex;
+	arr<int8_t> pixel;
 
 	vert = fopen (vs, "r");
 	pixl = fopen (ps, "r");
@@ -18,37 +25,34 @@ int8_t* importShader (const char* vs, const char* ps, int* lenVs, int* lenPs)
 	if (!vert or !pixl)
 	{
 		fprintf (stderr, "[x] Shader file at '%s'/'%s' failed to open\n", vs, ps);
-		return 0x0;
+		return;
 	}
 	
 	fseek (vert, 0, SEEK_END);
 	
-	arr<int8_t> string;
-	
 	int szV = ftell (vert);
-	string.allocate (szV+1);
-	string.count = szV+1;
+	vertex.allocate (szV+1);
+	vertex.count = szV+1;
 	
 	fseek (vert, 0, SEEK_SET);
-	fread (string.buf, 1, szV, vert);
+	fread (vertex.buf, 1, szV, vert);
 	fclose (vert);
-	string [string.count] = 0;
+	vertex [vertex.count] = 0;
 	
 	fseek (pixl, 0, SEEK_END);
 	
 	int szP = ftell (pixl);
-	string.allocate (szP+1 + string.count);
-	string.count += szP+1;
+	pixel.allocate (szP+1);
+	pixel.count += szP+1;
 	
 	fseek (pixl, 0, SEEK_SET);
-	fread (string.buf + string.count, 1, szP, pixl);
+	fread (pixel.buf + pixel.count, 1, szP, pixl);
 	fclose (pixl);
-	string [string.count] = 0;
+	pixel [pixel.count] = 0;
 	
-	if (lenVs) *lenVs = szV;
-	if (lenPs) *lenPs = szP;
-	
-	return string;
+	shr.vertex = vertex;
+	shr.pixel = pixel;
+	pack::insert (shr);
 }
 
 } // namespace
